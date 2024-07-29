@@ -1,6 +1,24 @@
-import axios from 'axios';
+import axios from "axios";
+import apiClient, { getMovies, getMovie } from "./api";
 
-const API_URL = 'http://localhost:8000/api/movies/';
+const API_URL = "http://localhost:8000/api/movies/";
+
+const apiClient = axios.create({
+  baseURL: "http://localhost:8000/api", // URL base del backend Django
+  withCredentials: false, // Cambia a true si necesitas enviar cookies
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+});
+
+export default apiClient;
+
+export const getMovies = () => apiClient.get("/movies/");
+export const getMovie = (id) => apiClient.get(`/movies/${id}/`);
+export const createMovie = (data) => apiClient.post("/movies/", data);
+export const updateMovie = (id, data) => apiClient.put(`/movies/${id}/`, data);
+export const deleteMovie = (id) => apiClient.delete(`/movies/${id}/`);
 
 export const api = {
   getMovies() {
@@ -17,3 +35,10 @@ export const api = {
   },
 };
 
+apiClient.get("/some-endpoint").then((response) => {
+  console.log(response.data);
+});
+
+getMovies().then((response) => {
+  console.log(response.data);
+});
